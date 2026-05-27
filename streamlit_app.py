@@ -13,7 +13,7 @@ st.markdown("""
     .besmele { font-size: 35px; margin-bottom: 10px; }
     .ana-baslik { font-size: 28px; letter-spacing: 2px; font-weight: bold; }
     
-    /* Alıntı kutusunun alt boşluğu düşürüldü */
+    /* Alıntı kutusu alt boşluğu tamamen minimize edildi */
     .quote-box { 
         background-color: #f2ede4; 
         padding: 25px; 
@@ -21,19 +21,27 @@ st.markdown("""
         font-style: italic; 
         color: #3e3328; 
         font-family: 'Crimson Text', serif; 
-        margin-bottom: 10px; 
+        margin-bottom: 5px; 
         margin-top: 15px;
     }
     
-    /* Gelen cevabın üstündeki beyaz boşluğu sıfırlayan kural */
-    .stMarkdown h3 {
+    /* Gözünü tırmalayan o anlamsız beyaz kutuyu ve boşluğu tamamen kaldıran sihirli CSS */
+    div[data-testid="stVerticalBlockBorderWrapper"] {
+        margin-bottom: 0px !important;
+        padding-bottom: 0px !important;
+    }
+    div[data-testid="stVerticalBlock"] > div {
         margin-top: 0px !important;
         padding-top: 0px !important;
+    }
+    .stMarkdown h3 {
+        margin-top: 0px !important;
+        padding-top: 5px !important;
     }
     
     .cevap-box { background-color: #ffffff; padding: 30px; border-radius: 8px; border: 1px solid #e6dfd5; color: #4a3b2c; font-family: 'Crimson Text', serif; line-height: 1.8; font-size: 18px; }
     
-    /* Buton Tasarımı ve Giriş Kutusuyla Hizalanması */
+    /* Butonun mobil ve masaüstünde tam oturması, gereksiz boşluk bırakmaması için */
     div.stButton > button { 
         background-color: #d4c4a8; 
         color: #3e3328; 
@@ -43,12 +51,19 @@ st.markdown("""
         font-weight: bold;
         letter-spacing: 1px;
         width: 100%;
-        margin-top: 0px;
+        margin-top: 5px !important;
     }
     div.stButton > button:hover {
         background-color: #c2b296;
         color: #faf9f6;
         border-color: #a8997f;
+    }
+    
+    /* Mobilde sütunların çirkin ayrılmasını önleyen responsive kural */
+    @media (max-width: 640px) {
+        div[data-testid="column"] {
+            margin-bottom: 5px !important;
+        }
     }
     </style>
 """, unsafe_allow_html=True)
@@ -77,8 +92,9 @@ client = OpenAI(
     api_key=api_key,
 )
 
-# 3. YAN YANA ARAYÜZ TASARIMI (Arama Kutusu ve Buton)
-col1, col2 = st.columns([8, 2], vertical_alignment="bottom")
+# 3. YAN YANA ARAYÜZ TASARIMI
+# Mobilde de daha derli toplu dursun diye sütun oranını 7.5'e 2.5 yaptık
+col1, col2 = st.columns([75, 25], vertical_alignment="bottom")
 
 with col1:
     kavram = st.text_input("", placeholder="su, yaprak, güneş, ateş, toprak...", label_visibility="collapsed")
@@ -91,7 +107,6 @@ if buton_tetiklendi:
     if kavram:
         with st.spinner("Kâinat kitabındaki mektup okunuyor..."):
             
-            # Hatalı olan % eşleşmesini doğrudan f-string mimarisine çevirerek kökten çözdük
             system_instruction = f"""
             Sen, Bediüzzaman Said Nursî Hazretleri'nin Risale-i Nur Külliyatı'nın o muazzam, yüksek, ağdalı, coşkulu ve haşmetli tefekkür lisanına tam manasıyla bürünmüş bir irfan kâtibisin.
 
