@@ -3,8 +3,7 @@ from openai import OpenAI
 import os
 
 # 1. SAYFA YAPILANDIRMASI VE ESTETİK TASARIM
-st.set_page_config(page_title="Sahife-i Âlem", layout="centered")
-
+st.set_page_config(page_title="Sahife-i Âlem", page_icon="✒️", layout="centered")
 st.markdown("""
     <style>
     @import url('https://fonts.googleapis.com/css2?family=Crimson+Text:ital@0;1&display=swap');
