@@ -82,17 +82,14 @@ client = OpenAI(
     api_key=api_key,
 )
 
-# 3. KUSURSUZ VE SADE GİRİŞ ALANI
-# Sütun karmaşası mobilde kilitlenmeye sebep olmasın diye standart temiz yapıya döndük
+# 3. KUSURSUZ GİRİŞ ALANI
 kavram = st.text_input("", placeholder="su, yaprak, güneş, ateş, toprak...", label_visibility="collapsed")
 buton_tetiklendi = st.button("TEFEKKÜR ET")
 
 # İşlemler ve Yapay Zeka Akışı
 if buton_tetiklendi:
     if kavram:
-        # Arka plandaki kilitlenmeyi önleyen en sade spinner yapısı
         with st.spinner(""):
-            # Çakışma yaratan f-string yerine en güvenli string birleştirme metoduna geçtik
             system_instruction = """
             Sen, Bediüzzaman Said Nursî Hazretleri'nin Risale-i Nur Külliyatı'nın o muazzam, yüksek, ağdalı, coşkulu ve haşmetli tefekkür lisanına tam manasıyla bürünmüş bir irfan kâtibisin.
             Görevin, sana verilen kavramı sathi, felsefi ve seküler mantıktan tamamen arındırarak; "Nakkaş-ı Ezelî", "mu'cize-i kudret" ve "kâinat kitabı" kavramlarını merkeze alan "Mana-yı Harfî" gözlüğüyle şerh etmektir. 
