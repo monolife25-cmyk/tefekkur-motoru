@@ -13,6 +13,7 @@ st.markdown("""
     .besmele { font-size: 35px; margin-bottom: 10px; }
     .ana-baslik { font-size: 28px; letter-spacing: 2px; font-weight: bold; }
     
+    /* Alıntı kutusu alt boşluğu tamamen minimize edildi */
     .quote-box { 
         background-color: #f2ede4; 
         padding: 25px; 
@@ -20,11 +21,11 @@ st.markdown("""
         font-style: italic; 
         color: #3e3328; 
         font-family: 'Crimson Text', serif; 
-        margin-bottom: 10px; 
+        margin-bottom: 5px; 
         margin-top: 15px;
     }
     
-    /* Sayfadaki tüm hayalet boşlukları ve gizli kutuları tamamen yok eden kesin CSS */
+    /* Gözünü tırmalayan o anlamsız beyaz kutuyu ve boşluğu tamamen kaldıran sihirli CSS */
     div[data-testid="stVerticalBlockBorderWrapper"] {
         margin-bottom: 0px !important;
         padding-bottom: 0px !important;
@@ -34,13 +35,13 @@ st.markdown("""
         padding-top: 0px !important;
     }
     .stMarkdown h3 {
-        margin-top: 15px !important;
-        padding-top: 0px !important;
+        margin-top: 0px !important;
+        padding-top: 5px !important;
     }
     
-    .cevap-box { background-color: #ffffff; padding: 30px; border-radius: 8px; border: 1px solid #e6dfd5; color: #4a3b2c; font-family: 'Crimson Text', serif; line-height: 1.8; font-size: 18px; margin-top: 10px; }
+    .cevap-box { background-color: #ffffff; padding: 30px; border-radius: 8px; border: 1px solid #e6dfd5; color: #4a3b2c; font-family: 'Crimson Text', serif; line-height: 1.8; font-size: 18px; }
     
-    /* Buton Tasarımı */
+    /* Butonun mobil ve masaüstünde tam oturması, gereksiz boşluk bırakmaması için */
     div.stButton > button { 
         background-color: #d4c4a8; 
         color: #3e3328; 
@@ -50,11 +51,19 @@ st.markdown("""
         font-weight: bold;
         letter-spacing: 1px;
         width: 100%;
+        margin-top: 5px !important;
     }
     div.stButton > button:hover {
         background-color: #c2b296;
         color: #faf9f6;
         border-color: #a8997f;
+    }
+    
+    /* Mobilde sütunların çirkin ayrılmasını önleyen responsive kural */
+    @media (max-width: 640px) {
+        div[data-testid="column"] {
+            margin-bottom: 5px !important;
+        }
     }
     </style>
 """, unsafe_allow_html=True)
@@ -84,6 +93,7 @@ client = OpenAI(
 )
 
 # 3. YAN YANA ARAYÜZ TASARIMI
+# Mobilde de daha derli toplu dursun diye sütun oranını 7.5'e 2.5 yaptık
 col1, col2 = st.columns([75, 25], vertical_alignment="bottom")
 
 with col1:
@@ -95,25 +105,40 @@ with col2:
 # İşlemler ve Yapay Zeka Akışı
 if buton_tetiklendi:
     if kavram:
-        # Boşluk bırakan st.spinner yerine arka planda işlem yapan durumsal API çağrısı
-        try:
-            completion = client.chat.completions.create(
-                model="llama-3.3-70b-versatile",
-                messages=[
-                    {"role": "system", "content": f"""
-                    Sen, Bediüzzaman Said Nursî Hazretleri'nin Risale-i Nur Külliyatı'nın o muazzam, yüksek, ağdalı, coşkulu ve haşmetli tefekkür lisanına tam manasıyla bürünmüş bir irfan kâtibisin.
-                    Görevin, sana verilen kavramı sathi, felsefi ve seküler mantıktan tamamen arındırarak; "Nakkaş-ı Ezelî", "mu'cize-i kudret" ve "kâinat kitabı" kavramlarını merkeze alan "Mana-yı Harfî" gözlüğüyle şerh etmektir. 
+        with st.spinner("Kâinat kitabındaki mektup okunuyor..."):
+            
+            system_instruction = f"""
+            Sen, Bediüzzaman Said Nursî Hazretleri'nin Risale-i Nur Külliyatı'nın o muazzam, yüksek, ağdalı, coşkulu ve haşmetli tefekkür lisanına tam manasıyla bürünmüş bir irfan kâtibisin.
 
-                    Çıktı formatı `### Bir {kavram} Kelimesi` başlığıyla başlamalı ve ardından maddeler halinde (Neden? (Hikmet Nazarıyla), Nasıl? (Kudret ve İ'caz Nazarıyla), Kimin Adına? (Fikr-i Hakikatle)) gelmelidir.
-                    Modern, ruhsuz, felsefi tek bir kelime bile kullanma. Metnin her cümlesi sarsıcı bir imanî belagatte olmalıdır.
-                    """},
-                    {"role": "user", "content": f"Lütfen '{kavram}' kavramını fıtratına has en ahenkli ve esnek anlatımlarla tefekkür et."}
-                ]
-            )
-            cevap = completion.choices[0].message.content
-        except Exception as e:
-            st.error(f"Sistemle iletişim kurulurken bir hata oluştu: {e}")
-            cevap = None
+            Görevin, sana verilen kavramı sathi, felsefi ve seküler mantıktan tamamen arındırarak; "Nakkaş-ı Ezelî", "mu'cize-i kudret" ve "kâinat kitabı" kavramlarını merkeze alan "Mana-yı Harfî" gözlüğüyle şerh etmektir. 
+
+            Sana verilen kavramı tefekkür ederken aşağıdaki rehber örneğin edebi kıvamını temel kabul et ancak mekanik taklit yapma, kavramın fıtratına göre esnet.
+
+            ---
+            [İLHÂM VERİCİ REHBER ÖRNEK]
+            ### Örnek: Bir Ağaç Kelimesi
+            * **Neden? (Hikmet Nazarıyla):** Bir ağaç, "sahife-i âlemde" sadece odun ve yapraktan ibaret bir varlık değildir; o, "Nakkaş-ı Ezelî'nin" yeryüzü sayfasına yazdığı köklü, heybetli ve hayat dolu bir cümledir. Yaratılış hikmeti; toprağın derinliklerinden aldığı besinle insana gölge, meyve ve oksijen sunarak, "mele-i a'lâdan uzanan" bu rahmet zinciriyle insanın ruhunu "âlâ-yı illiyyîn-i tevhide" yükseltmektir.
+            * **Nasıl? (Kudret ve İ'caz Nazarıyla):** Bir tohumun içinden koca bir gövdenin çıkması, o dalların nizamı ve yaprakların dizilişindeki matematiksel ölçü, tam bir "mu'cize-i kudret" eseridir. Şuursuz, kör ve basit tabiat sebeplerinin bu muazzam sanatlı yapıyı kendi kendine inşa etmesi "muhal-ender muhaldir". Bir ağacı vücuda getirmek için kâinatın heyet-i mecmuasındaki nizamı elinde tutan bir kudret lazımdır.
+            * **Kimin Adına? (Fikr-i Hakikatle):** Ağaç, kendi namına veya kör kuvvetler adına büyümez. O, kâinat kitabının "heyet-i mecmuasında" tecelli eden "Nazzam-ı Ezelî" adına vazife yapar. Bütün o azametiyle, aslında arkasındaki sonsuz rahmet ve hikmet sahibi "Sâni'in" adını zikreder.
+            ---
+
+            ⚠️ KESİN KURALLAR:
+            - Çıktı formatı `### Bir {kavram} Kelimesi` başlığıyla başlamalı ve ardından maddeler halinde (Neden?, Nasıl?, Kimin Adına?) gelmelidir.
+            - Modern, ruhsuz, felsefi tek bir kelime bile kullanma. Metnin her cümlesi sarsıcı bir imanî belagatte olmalıdır.
+            """
+            
+            try:
+                completion = client.chat.completions.create(
+                    model="llama-3.3-70b-versatile",
+                    messages=[
+                        {"role": "system", "content": system_instruction},
+                        {"role": "user", "content": f"Lütfen '{kavram}' kavramını fıtratına has en ahenkli ve esnek anlatımlarla tefekkür et."}
+                    ]
+                )
+                cevap = completion.choices[0].message.content
+            except Exception as e:
+                st.error(f"Sistemle iletişim kurulurken bir hata oluştu: {e}")
+                cevap = None
 
         if cevap:
             st.markdown("<div class='cevap-box'>", unsafe_allow_html=True)
