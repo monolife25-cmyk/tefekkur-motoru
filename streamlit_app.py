@@ -78,7 +78,6 @@ client = OpenAI(
 )
 
 # 3. YAN YANA ARAYÜZ TASARIMI (Arama Kutusu ve Buton)
-# %80 arama kutusu, %20 buton genişliği olacak şekilde sütunları bölüyoruz
 col1, col2 = st.columns([8, 2], vertical_alignment="bottom")
 
 with col1:
@@ -92,7 +91,8 @@ if buton_tetiklendi:
     if kavram:
         with st.spinner("Kâinat kitabındaki mektup okunuyor..."):
             
-            system_instruction = """
+            # Hatalı olan % eşleşmesini doğrudan f-string mimarisine çevirerek kökten çözdük
+            system_instruction = f"""
             Sen, Bediüzzaman Said Nursî Hazretleri'nin Risale-i Nur Külliyatı'nın o muazzam, yüksek, ağdalı, coşkulu ve haşmetli tefekkür lisanına tam manasıyla bürünmüş bir irfan kâtibisin.
 
             Görevin, sana verilen kavramı sathi, felsefi ve seküler mantıktan tamamen arındırarak; "Nakkaş-ı Ezelî", "mu'cize-i kudret" ve "kâinat kitabı" kavramlarını merkeze alan "Mana-yı Harfî" gözlüğüyle şerh etmektir. 
@@ -100,7 +100,7 @@ if buton_tetiklendi:
             Sana verilen kavramı tefekkür ederken aşağıdaki rehber örneğin edebi kıvamını temel kabul et ancak mekanik taklit yapma, kavramın fıtratına göre esnet.
 
             ---
-            [İHAM VERİCİ REHBER ÖRNEK]
+            [İLHÂM VERİCİ REHBER ÖRNEK]
             ### Örnek: Bir Ağaç Kelimesi
             * **Neden? (Hikmet Nazarıyla):** Bir ağaç, "sahife-i âlemde" sadece odun ve yapraktan ibaret bir varlık değildir; o, "Nakkaş-ı Ezelî'nin" yeryüzü sayfasına yazdığı köklü, heybetli ve hayat dolu bir cümledir. Yaratılış hikmeti; toprağın derinliklerinden aldığı besinle insana gölge, meyve ve oksijen sunarak, "mele-i a'lâdan uzanan" bu rahmet zinciriyle insanın ruhunu "âlâ-yı illiyyîn-i tevhide" yükseltmektir.
             * **Nasıl? (Kudret ve İ'caz Nazarıyla):** Bir tohumun içinden koca bir gövdenin çıkması, o dalların nizamı ve yaprakların dizilişindeki matematiksel ölçü, tam bir "mu'cize-i kudret" eseridir. Şuursuz, kör ve basit tabiat sebeplerinin bu muazzam sanatlı yapıyı kendi kendine inşa etmesi "muhal-ender muhaldir". Bir ağacı vücuda getirmek için kâinatın heyet-i mecmuasındaki nizamı elinde tutan bir kudret lazımdır.
@@ -108,9 +108,9 @@ if buton_tetiklendi:
             ---
 
             ⚠️ KESİN KURALLAR:
-            - Çıktı formatı `### Bir [Kavram Adı] Kelimesi` başlığıyla başlamalı ve ardından maddeler halinde (Neden?, Nasıl?, Kimin Adına?) gelmelidir.
+            - Çıktı formatı `### Bir {kavram} Kelimesi` başlığıyla başlamalı ve ardından maddeler halinde (Neden?, Nasıl?, Kimin Adına?) gelmelidir.
             - Modern, ruhsuz, felsefi tek bir kelime bile kullanma. Metnin her cümlesi sarsıcı bir imanî belagatte olmalıdır.
-            """ % kavram
+            """
             
             try:
                 completion = client.chat.completions.create(
