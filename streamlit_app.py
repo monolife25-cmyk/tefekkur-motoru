@@ -123,7 +123,7 @@ if buton_tetiklendi:
             ---
 
             ⚠️ KESİN KURALLAR:
-            - Çıktı formatı `### Bir {kavram} Kelimesi` başlığıyla başlamalı ve ardından maddeler halinde (Neden?, Nasıl?, Kimin Adına?) gelmelidir.
+            - Çıktı formatı `### Bir {kavram} ` başlığıyla başlamalı ve ardından maddeler halinde (Neden?, Nasıl?, Kimin Adına?) gelmelidir.
             - Modern, ruhsuz, felsefi tek bir kelime bile kullanma. Metnin her cümlesi sarsıcı bir imanî belagatte olmalıdır.
             """
             
