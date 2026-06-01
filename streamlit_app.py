@@ -63,8 +63,8 @@ api_key = ""
 try:
     if hasattr(st, "secrets") and st.secrets is not None:
         if "GROQ_API_KEY" in st.secrets:
-            api_key = st.secrets["Gsk_BkWM6hjCwzJf4wC4RJnbWGdyb3FYv0P5ABjSruZ3qJ0uXsqNk3Vc]
-        elif "OPENROUTER_API_KEY" in st.secrets:
+api_key = st.secrets["GROQ_API_KEY"]
+"OPENROUTER_API_KEY" in st.secrets:
             api_key = st.secrets["OPENROUTER_API_KEY"]
 except Exception:
     pass
