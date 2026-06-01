@@ -70,7 +70,7 @@ except Exception:
     pass
 
 if not api_key:
-    api_key = os.environ.get("GROQ_API_KEY", "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")
+    api_key = os.environ.get("GROQ_API_KEY", "Gsk_BkWM6hjCwzJf4wC4RJnbWGdyb3FYv0P5ABjSruZ3qJ0uXsqNk3Vc)
 
 client = OpenAI(
     base_url="https://api.groq.com/openai/v1",
