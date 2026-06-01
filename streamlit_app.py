@@ -58,19 +58,23 @@ st.markdown("<div class='baslik-container'><div class='besmele'>بِسْمِ ا�
 st.markdown("<div class='quote-box'>\"Sahife-i âlemin eb'âd-ı vâsiasında Nakkaş-ı Ezelî'nin yazdığı silsile-i hâdisâtın satırlarına hikmet nazarıyla bak ve fikr-i hakikatle sarıl. Ta ki mele-i âlâdan uzanan şu selâsil-i resâil seni âlâ-yı illiyyîn-i tevhîde çıkarsın.\"<br><br>— Bediüzzaman Said Nursî, Mesnevi-i Nuriye</div>", unsafe_allow_html=True)
 
 # 2. GÜVENLİ GROQ API BAĞLANTISI
-api_key = "" 
+api_key = None 
 
 try:
     if hasattr(st, "secrets") and st.secrets is not None:
         if "GROQ_API_KEY" in st.secrets:
-api_key = st.secrets["GROQ_API_KEY"]
-"OPENROUTER_API_KEY" in st.secrets:
+            api_key = st.secrets["GROQ_API_KEY"]
+        elif "OPENROUTER_API_KEY" in st.secrets:
             api_key = st.secrets["OPENROUTER_API_KEY"]
 except Exception:
     pass
 
 if not api_key:
-    api_key = os.environ.get("GROQ_API_KEY", "Gsk_BkWM6hjCwzJf4wC4RJnbWGdyb3FYv0P5ABjSruZ3qJ0uXsqNk3Vc)
+    api_key = os.environ.get("GROQ_API_KEY")
+
+if not api_key:
+    st.error("Lütfen Streamlit Secrets paneline GROQ_API_KEY anahtarınızı ekleyin.")
+    st.stop()
 
 client = OpenAI(
     base_url="https://api.groq.com/openai/v1",
@@ -91,7 +95,6 @@ if buton_tetiklendi:
     if kavram:
         with st.spinner("Kâinat kitabındaki mektup okunuyor..."):
             
-            # Hatalı olan % eşleşmesini doğrudan f-string mimarisine çevirerek kökten çözdük
             system_instruction = f"""
             Sen, Bediüzzaman Said Nursî Hazretleri'nin Risale-i Nur Külliyatı'nın o muazzam, yüksek, ağdalı, coşkulu ve haşmetli tefekkür lisanına tam manasıyla bürünmüş bir irfan kâtibisin.
 
@@ -103,7 +106,7 @@ if buton_tetiklendi:
             [İLHÂM VERİCİ REHBER ÖRNEK]
             ### Örnek: Bir Ağaç Kelimesi
             * **Neden? (Hikmet Nazarıyla):** Bir ağaç, "sahife-i âlemde" sadece odun ve yapraktan ibaret bir varlık değildir; o, "Nakkaş-ı Ezelî'nin" yeryüzü sayfasına yazdığı köklü, heybetli ve hayat dolu bir cümledir. Yaratılış hikmeti; toprağın derinliklerinden aldığı besinle insana gölge, meyve ve oksijen sunarak, "mele-i a'lâdan uzanan" bu rahmet zinciriyle insanın ruhunu "âlâ-yı illiyyîn-i tevhide" yükseltmektir.
-            * **Nasıl? (Kudret ve İ'caz Nazarıyla):** Bir tohumun içinden koca bir gövdenin çıkması, o dalların nizamı ve yaprakların dizilişindeki matematiksel ölçü, tam bir "mu'cize-i kudret" eseridir. Şuursuz, kör ve basit tabiat sebeplerinin bu muazzam sanatlı yapıyı kendi kendine inşa etmesi "muhal-ender muhaldir". Bir ağacı vücuda getirmek için kâinatın heyet-i mecmuasındaki nizamı elinde tutan bir kudret lazımdır.
+            * **Nasıl? (Kudret ve İ'caz Nazarıyla):** Bir tohumun içinden koca bir gövdenin çıkması, o dalların nizamı ve yapraklerin dizilişindeki matematiksel ölçü, tam bir "mu'cize-i kudret" eseridir. Şuursuz, kör ve basit tabiat sebeplerinin bu muazzam sanatlı yapıyı kendi kendine inşa etmesi "muhal-ender muhaldir". Bir ağacı vücuda getirmek için kâinatın heyet-i mecmuasındaki nizamı elinde tutan bir kudret lazımdır.
             * **Kimin Adına? (Fikr-i Hakikatle):** Ağaç, kendi namına veya kör kuvvetler adına büyümez. O, kâinat kitabının "heyet-i mecmuasında" tecelli eden "Nazzam-ı Ezelî" adına vazife yapar. Bütün o azametiyle, aslında arkasındaki sonsuz rahmet ve hikmet sahibi "Sâni'in" adını zikreder.
             ---
 
